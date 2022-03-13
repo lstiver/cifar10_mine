@@ -1,8 +1,5 @@
-import torch.cuda
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 class Net(nn.Module):
@@ -30,6 +27,5 @@ class Net(nn.Module):
 
 def create_net():
     model = Net()
-    model.to(device)
     return model
 
