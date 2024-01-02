@@ -11,14 +11,23 @@ valid_size = 0.2
 classes = ('plane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 # 将数据转化为torch.FloatTensor并标准化
-transform = transforms.Compose(
-    [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+transform_train = transforms.Compose([
+    # transforms.RandomHorizontalFlip(), #通过随机选择是否对图像进行水平翻转，增加数据的多样性
+    # transforms.RandomCrop(32, padding=4), #在图像上进行随机裁剪
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+])
 
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=False, transform=transform)
+transform_test = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+])
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=False, transform=transform)
+trainset = torchvision.datasets.CIFAR10(root='./数据集', train=True,
+                                        download=False, transform=transform_train)
+
+testset = torchvision.datasets.CIFAR10(root='./数据集', train=False,
+                                       download=False, transform=transform_test)
 
 train_nums = len(trainset)
 index_list = list(range(train_nums))
@@ -38,5 +47,9 @@ valid_loader = data.DataLoader(trainset, batch_size=batch_size,
 
 test_loader = data.DataLoader(testset, batch_size=batch_size,
                               shuffle=False, num_workers=num_workers)
+print(f"训练集大小: {len(train_loader.dataset)}")
+print(f"验证集大小: {len(valid_loader.dataset)}")
+print(f"测试集大小: {len(test_loader.dataset)}")
+
 
 
